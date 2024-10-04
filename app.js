@@ -3,7 +3,6 @@ const connect_db = require("./configs/db")
 const user_routes = require("./routes/userRoutes")
 const blog_routes = require("./routes/blogRoutes")
 const session = require('express-session')
-const authenticate = require("./middleware/authenticate")
 require('dotenv').config()
 
 
@@ -17,8 +16,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-
 app.use(express.json())
+
 app.use("/users",user_routes)
 app.use("/blogs",blog_routes)
 

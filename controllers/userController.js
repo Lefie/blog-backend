@@ -1,15 +1,13 @@
 const userService = require("../services/userService")
 
-
 const signup = async(req, res) => {
     try {
-        
         const user = await userService.createUser(req.body)
         console.log(user)
         res.status(200).json(user)
 
     }catch(err) {
-        res.status(500).send(err)
+        res.status(500).json({err:"error signing up"})
     }
 }
 
@@ -25,7 +23,7 @@ const login = async(req, res) => {
         res.status(200).json(req.session)
 
     }catch(err){
-        res.status(500).send(err)
+        res.status(500).json({error:"error logging in user "})
     }
 
 }
@@ -40,7 +38,7 @@ const logout = async(req, res) => {
         }
     
     }catch(error){
-        res.status(500).send(error)
+        res.status(500).json({error:"error logging out"})
     }
 }
 
