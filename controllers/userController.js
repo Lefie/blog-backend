@@ -7,6 +7,7 @@ const signup = async(req, res) => {
         res.status(200).json(user)
 
     }catch(err) {
+        console.log(req.body)
         res.status(500).json({err:"error signing up"})
     }
 }

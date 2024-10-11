@@ -5,15 +5,16 @@ const formatted_date = require("../utils/processDate")
 const create_blog = async(req, res) => {
     try {
         // the input data
-        const {title, content} = req.body
+        const {title, content,img_url} = req.body
         const author = req.session.username
         const date = formatted_date()
         const blog_data = {
             title : title,
             content : content,
             date: date,
-            author: author
-        }
+            author: author,
+            img_url: img_url
+        }      
         const blog = await blogService.create_blog(blog_data)
         console.log(blog)
         res.status(200).json(blog)
@@ -91,9 +92,9 @@ const update_blog = async(req, res) => {
         const author = blog.author
         console.log(logged_in_user, author)
         if (logged_in_user === author){
-            const { title, content } = req.body
+            const { title, content,img_url } = req.body
             const date = formatted_date()
-            const updatedBlog = await blogService.updateBlog(blog_id,{title:title, content:content, date:date})
+            const updatedBlog = await blogService.updateBlog(blog_id,{title:title, content:content, date:date,img_url:img_url})
             console.log("updated")
             res.status(200).json(updatedBlog)
         }else{

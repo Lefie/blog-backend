@@ -11,6 +11,7 @@ assume input data has structure as such
 */
 const createUser = async( userdata ) => {
     const new_user = User(userdata)
+    console.log(new_user)
     const user = await new_user.save()
     return user
 }

@@ -1,6 +1,5 @@
 
 const authenticate = (req, res, next) => {
-
     const session = req.session
     const isLoggedin = session.isLoggedin
     const username = session.username
@@ -12,6 +11,5 @@ const authenticate = (req, res, next) => {
         res.sendStatus(403)
     }
 } 
-
 
 module.exports = authenticate
