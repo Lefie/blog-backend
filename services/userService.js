@@ -10,10 +10,23 @@ assume input data has structure as such
 
 */
 const createUser = async( userdata ) => {
-    const new_user = User(userdata)
-    console.log(new_user)
-    const user = await new_user.save()
-    return user
+    // check if username is already taken 
+    const {username} = userdata
+    try{
+        const user = await User.where({username:username})
+        console.log(user.length)
+        if(user.length !== 0){
+            throw new Error('username already exists')
+        }else{
+            const new_user = User(userdata)
+            console.log(new_user)
+            const user = await new_user.save()
+            return user
+        }
+    }catch(error){
+        console.log("error in creating user", error)
+        throw error
+    } 
 }
 
 // login 
