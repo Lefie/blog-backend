@@ -19,11 +19,14 @@ const uploadFromBuffer = (buffer) => {
 }
 
 router.post("/upload", authenticate, uploadimg.single("image"), async(req, res) =>{
+       
+    
     if(!req.file){
         return res.status(400).json({msg:"no file uploaded"})
     }
 
     try {
+        console.log("this is what req.file looks like", req.file)
         const result = await uploadFromBuffer(req.file.buffer)
         console.log(result)
         res.json({

@@ -5,7 +5,7 @@ const blogController = require('../controllers/blogController')
 const authenticate = require("../middleware/authenticate")
 
 // create a blog 
-router.post("/create-blog",authenticate, blogController.create_blog)
+router.post("/create-blog", blogController.create_blog)
 
 // read a blog
 router.get("/blog/:blog_id", blogController.read_one_blog)

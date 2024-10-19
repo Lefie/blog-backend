@@ -4,9 +4,10 @@ const formatted_date = require("../utils/processDate")
 // creating a blog
 const create_blog = async(req, res) => {
     try {
+        const cookie = req.cookies['chocolate_cookie']
         // the input data
         const {title, content,img_url} = req.body
-        const author = req.session.username
+        const author = cookie.username
         const date = formatted_date()
         const blog_data = {
             title : title,
@@ -15,6 +16,7 @@ const create_blog = async(req, res) => {
             author: author,
             img_url: img_url
         }      
+        console.log("blog data", blog_data)
         const blog = await blogService.create_blog(blog_data)
         console.log(blog)
         res.status(200).json(blog)
@@ -56,7 +58,8 @@ const all_blogs = async(req, res) => {
 // find all the blogs that belong to the logged in user
 const my_blogs = async(req, res) => {
     try {
-        const username = req.session.username
+        const cookie = req.cookies["chocolate_cookie"]
+        const username = cookie.username
         const my_blogs = await blogService.findBlogsByQuery({author:username})
         res.status(200).json(my_blogs)
     }catch(error){

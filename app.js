@@ -3,9 +3,12 @@ const connect_db = require("./configs/db")
 const user_routes = require("./routes/userRoutes")
 const blog_routes = require("./routes/blogRoutes")
 const image_routes = require("./routes/imageRoute")
-const session = require('express-session')
+const cookieSession = require('cookie-session')
+//const session = require('express-session')
 const cors = require('cors')
 require('dotenv').config()
+const body_parser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const cloudinary = require('cloudinary').v2
 
 
@@ -20,15 +23,25 @@ cloudinary.config({
     api_secret:process.env.CLOUDINARY_API_SECRET
 })
 
+
+app.use(cookieParser())
+app.use(body_parser.json())
+//app.use(express.json())
+
+const allowedOrigins = ["http://localhost:3000","http://127.0.0.1:3000"]
+
 // cors enabled
-app.use(cors())
-// session middleware 
-app.use(session({
-    secret: 'a-blue-cat',
-    resave: false,
-    saveUninitialized: false
-}))
-app.use(express.json())
+app.use(cors({
+    origin: function(origin, cb){
+        if(allowedOrigins.includes(origin) || !origin){
+            cb(null, true)
+        }else{
+            cb(new Error("not allowed by CORS"))
+        }
+    },
+    credentials:true,
+    }
+))
 
 
 app.use("/users",user_routes)

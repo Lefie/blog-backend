@@ -37,19 +37,19 @@ is found in the database and is validated
 */
 const login = async(userdata) => {
 
-        const {username, password} = userdata
-        const query = User.where({username:username})
-        const user = await query.findOne()
+    const {username, password} = userdata
+    const query = User.where({username:username})
+    const user = await query.findOne()
 
-        if (user){
-            const password_in_db = user.password
-            if(password_in_db === String(password)){
-                console.log("user exists and the password matches")
-                return true
-            }
+    if (user){
+        const password_in_db = user.password
+        if(password_in_db === String(password)){
+            console.log("user exists and the password matches")
+            return true
         }
+    }
 
-        return false
+    return false
 }
 
 
