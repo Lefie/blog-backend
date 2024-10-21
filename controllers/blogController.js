@@ -74,6 +74,7 @@ const my_blogs = async(req, res) => {
 const blog_by_author = async(req, res) => {
     try{
         const author_name = req.params.author_name
+        console.log("backend", author_name)
         const blogs = await blogService.findBlogsByQuery({author:author_name})
         res.status(200).json(blogs)
     }catch(error){
@@ -83,6 +84,19 @@ const blog_by_author = async(req, res) => {
         })
     }
 }
+
+// find all the authors
+const authors = async(req, res) => {
+    try {
+        const authors = await blogService.findAllAuthors()
+        
+        res.status(200).json({authors})
+
+    }catch(error){
+        res.status(500).json({"error": error})
+    }
+}
+
 
 
 // update a blg
@@ -145,5 +159,6 @@ module.exports = {
     my_blogs,
     update_blog,
     blog_by_author,
-    delete_blog
+    delete_blog,
+    authors
 }

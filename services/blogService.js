@@ -27,6 +27,13 @@ const findBlogsByQuery = async( query ) => {
     return blogs
 }
 
+// find distinct authors 
+const findAllAuthors = async() => {
+    
+    const authors = await Blog.distinct('author')
+    return authors
+}
+
 // update a blog
 const updateBlog = async( id, update_data_obj) => {
     const blog = await Blog.findByIdAndUpdate(id,update_data_obj)
@@ -45,5 +52,6 @@ module.exports = {
     findAllBlogs,
     findBlogsByQuery,
     updateBlog,
-    deleteBlogById
+    deleteBlogById,
+    findAllAuthors
 }
