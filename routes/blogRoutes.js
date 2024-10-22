@@ -8,10 +8,10 @@ const authenticate = require("../middleware/authenticate")
 router.post("/create-blog", authenticate, blogController.create_blog)
 
 // read a blog
-router.get("/blog/:blog_id", authenticate, blogController.read_one_blog)
+router.get("/blog/:blog_id", blogController.read_one_blog)
 
 // find all blogs
-router.get("/all", authenticate, blogController.all_blogs)
+router.get("/all", blogController.all_blogs)
 
 // find all the blogs that belongs to the logged in users 
 router.get("/my_blogs", authenticate, blogController.my_blogs)
