@@ -13,6 +13,7 @@ const create_blog = async(req, res) => {
             title : title,
             content : content,
             date: date,
+            updated_date:"",
             author: author,
             img_url: img_url
         }      
@@ -111,7 +112,7 @@ const update_blog = async(req, res) => {
         if (logged_in_user === author){
             const { title, content,img_url } = req.body
             const date = formatted_date()
-            const updatedBlog = await blogService.updateBlog(blog_id,{title:title, content:content, date:date,img_url:img_url})
+            const updatedBlog = await blogService.updateBlog(blog_id,{title:title, content:content, updated_date:date,img_url:img_url})
             console.log("updated")
             res.status(200).json(updatedBlog)
         }else{
