@@ -105,7 +105,7 @@ const update_blog = async(req, res) => {
         // make sure that this blog's author is the logged-in user 
         const blog_id = req.params.blog_id
         const blog = await blogService.findBlogById(blog_id)
-        const logged_in_user = req.session.username
+        const logged_in_user = req.cookies['chocolate_cookie'].username
         const author = blog.author
         console.log(logged_in_user, author)
         if (logged_in_user === author){
@@ -129,7 +129,7 @@ const update_blog = async(req, res) => {
 const delete_blog = async(req, res) => {
     try {
         const blog_id = req.params.blog_id
-        const username = req.session.username
+        const username = req.cookies['chocolate_cookie'].username
         const blog = await blogService.findBlogById(blog_id)
         const author = blog.author
 
