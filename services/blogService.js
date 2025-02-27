@@ -17,7 +17,8 @@ const findBlogById = async (id) => {
 
 // find all blogs 
 const findAllBlogs = async () => {
-    const blogs = await Blog.find({})
+    const blogs = await Blog.find({}).sort({date: 'asc'})
+    console.log("find all blods", blogs)
     return blogs
 }
 

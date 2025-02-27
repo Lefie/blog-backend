@@ -20,8 +20,6 @@ const login = async(req, res) => {
         console.log("from user controller user object", isUser)
         if(isUser){
             console.log(" in the login", isUser)
-            
-            
             const cookieData = {'isLoggedin':true, 'username':req.body.username}
             res.cookie('chocolate_cookie',{username:req.body.username, isLoggedin:true},{
                 httpOnly:true,
@@ -57,7 +55,6 @@ const logout = async(req, res) => {
 const testUser = async(req, res) => {
     console.log("I am just here to test session")
     console.log(req.cookies)
-
     res.status(200).json({session:req.cookies})
 }
 
