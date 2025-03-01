@@ -17,8 +17,9 @@ const findBlogById = async (id) => {
 
 // find all blogs 
 const findAllBlogs = async () => {
-    const blogs = await Blog.find({}).sort({date: 'asc'})
-    console.log("find all blods", blogs)
+    const blogs = await Blog.find({})
+                    .lean()
+                    .then(blogs => blogs.sort((a, b) => new Date(b.date) - new Date(a.date)) )
     return blogs
 }
 
@@ -30,7 +31,6 @@ const findBlogsByQuery = async( query ) => {
 
 // find distinct authors 
 const findAllAuthors = async() => {
-    
     const authors = await Blog.distinct('author')
     return authors
 }
@@ -47,6 +47,13 @@ const deleteBlogById = async (id) => {
     return blog
 }
 
+// delete all the blogs 
+const deleteAllBlogs = async() => {
+   const deleted_blogs = await Blog.deleteMany({})
+   console.log("delete all blogs")
+   return deleted_blogs
+}
+
 module.exports = {
     create_blog,
     findBlogById,
@@ -54,5 +61,6 @@ module.exports = {
     findBlogsByQuery,
     updateBlog,
     deleteBlogById,
-    findAllAuthors
+    findAllAuthors,
+    deleteAllBlogs
 }

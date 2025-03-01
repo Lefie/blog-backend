@@ -33,8 +33,8 @@ const createUser = async( userdata ) => {
 /*
 the return type will be a boolean indicating whether or not the user
 is found in the database and is validated
-
 */
+
 const login = async(userdata) => {
 
     const {username, password} = userdata
@@ -52,9 +52,18 @@ const login = async(userdata) => {
     return false
 }
 
+// delete all the users 
+const deleteAllUsers = async() => {
+   const deleted_users = await User.deleteMany({})
+   console.log("delete all user")
+   return deleted_users
+}
+
+
 
 
 module.exports = {
     createUser,
-    login
+    login,
+    deleteAllUsers
 }

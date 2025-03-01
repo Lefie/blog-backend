@@ -58,10 +58,27 @@ const testUser = async(req, res) => {
     res.status(200).json({session:req.cookies})
 }
 
+// CAREFUL: delete all users
+const delete_all_users =  async(req, res) => {
+    try {
+        const deleted_users = await userService.deleteAllUsers()
+       
+        if(deleted_users) {
+            return res.status(200).json({"msg":"delete success"})
+        }else {
+            return res.status(500).json({"msg":"delete failed"})
+        }
+
+    }catch(error){
+        return res.status(500).json({error:"error deleting all users"})
+    }
+}
+
 module.exports = {
     signup,
     login,
     logout,
-    testUser
+    testUser,
+    delete_all_users
 }
 

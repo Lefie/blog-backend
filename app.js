@@ -3,14 +3,12 @@ const connect_db = require("./configs/db")
 const user_routes = require("./routes/userRoutes")
 const blog_routes = require("./routes/blogRoutes")
 const image_routes = require("./routes/imageRoute")
-const cookieSession = require('cookie-session')
 //const session = require('express-session')
 const cors = require('cors')
 require('dotenv').config()
 const body_parser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cloudinary = require('cloudinary').v2
-
 
 
 const app = express()

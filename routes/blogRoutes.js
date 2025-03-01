@@ -28,5 +28,8 @@ router.put("/blog/:blog_id", authenticate, blogController.update_blog)
 // delete a blog 
 router.delete("/blog/:blog_id", authenticate, blogController.delete_blog)
 
+//testing 
+//delete all blogs 
+router.delete("/delete_all",blogController.delete_all_blogs)
 
 module.exports = router

@@ -8,12 +8,9 @@ const create_blog = async(req, res) => {
         // the input data
         const {title, content,img_url} = req.body
         const author = cookie.username
-        const date = formatted_date()
         const blog_data = {
             title : title,
             content : content,
-            date: date,
-            updated_date:"",
             author: author,
             img_url: img_url
         }      
@@ -22,7 +19,7 @@ const create_blog = async(req, res) => {
         console.log(blog)
         res.status(200).json(blog)
     }catch(error){
-        res.status(500).json({
+        return res.status(500).json({
             "msg":"error creating blog",
             "error":error
         })
@@ -47,9 +44,10 @@ const read_one_blog = async(req,res) => {
 const all_blogs = async(req, res) => {
     try {
        const all_blogs = await blogService.findAllBlogs();
-       res.status(200).json(all_blogs)
+       console.log("all blogs ", all_blogs)
+       return res.status(200).json(all_blogs)
     }catch(error){
-        res.status(500).json({
+        return res.status(500).json({
             "msg":"error retrieving all blogs",
             "error":error
         })
@@ -151,6 +149,22 @@ const delete_blog = async(req, res) => {
 
 }
 
+//CAREFUL: delete all blogs 
+const delete_all_blogs = async(req, res) => {
+    try {
+        const deleted_all_blogs = await blogService.deleteAllBlogs()
+        if(delete_all_blogs){
+           return res.status(200).json({"msg":"deletion successful"})
+        }
+        else {
+            return res.status(500).json({"msg":"deletion unsuccessful"})
+        }
+    }catch(error) {
+        res.status(500).json({
+            "msg":`delete all error ${error}`
+        })
+    }
+}
 
 
 module.exports = {
@@ -161,5 +175,6 @@ module.exports = {
     update_blog,
     blog_by_author,
     delete_blog,
-    authors
+    authors,
+    delete_all_blogs
 }
