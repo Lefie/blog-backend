@@ -45,11 +45,22 @@ const login = async(userdata) => {
         const password_in_db = user.password
         if(password_in_db === String(password)){
             console.log("user exists and the password matches")
-            return true
+            return {
+                "userExists":true,
+                "passwordCorrect": true
+            }
+        }else{
+            return {
+                "userExists":true,
+                "passwordCorrect": false
+            }
         }
     }
 
-    return false
+    return  {
+        "userExists":false,
+        "passwordCorrect": false
+    }
 }
 
 // delete all the users 

@@ -16,10 +16,10 @@ const signup = async(req, res) => {
 const login = async(req, res) => {
     try {
         console.log("I am in login")
-        const isUser = await userService.login(req.body)
-        console.log("from user controller user object", isUser)
-        if(isUser){
-            console.log(" in the login", isUser)
+        const user = await userService.login(req.body)
+        console.log("from user controller user object", user)
+        if(user.userExists && user.passwordCorrect){
+            console.log(" in the login", user)
             const cookieData = {'isLoggedin':true, 'username':req.body.username}
             res.cookie('chocolate_cookie',{username:req.body.username, isLoggedin:true},{
                 httpOnly:true,
@@ -30,11 +30,11 @@ const login = async(req, res) => {
             return res.status(200).json(cookieData)
 
         }else{
-            res.json({error:'user is not logged in for some reason. check '})
+            return res.status(200).json(user)
         }
 
     }catch(err){
-        res.status(500).json({error:"error logging in user" + err})
+        return res.status(500).json({error:"error logging in user" + err})
     }
 }
 

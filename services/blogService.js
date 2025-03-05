@@ -17,15 +17,14 @@ const findBlogById = async (id) => {
 
 // find all blogs 
 const findAllBlogs = async () => {
-    const blogs = await Blog.find({})
-                    .lean()
-                    .then(blogs => blogs.sort((a, b) => new Date(b.date) - new Date(a.date)) )
+    const blogs = await Blog.find({}).sort({'date':-1})
+                    
     return blogs
 }
 
 // find blogs by some condition
 const findBlogsByQuery = async( query ) => {
-    const blogs = await Blog.find(query)
+    const blogs = await Blog.find(query).sort({'date':-1})
     return blogs
 }
 
