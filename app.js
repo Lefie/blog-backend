@@ -26,7 +26,7 @@ app.use(cookieParser())
 app.use(body_parser.json())
 //app.use(express.json())
 
-const allowedOrigins = ["http://localhost:3000","http://127.0.0.1:3000"]
+const allowedOrigins = ["http://localhost:3000","http://127.0.0.1:3000","https://blog-frontend-1-nine.vercel.app"]
 
 // cors enabled
 app.use(cors({
@@ -38,6 +38,8 @@ app.use(cors({
         }
     },
     credentials:true,
+    methods: ["GET", "POST", "PUT", "DELETE"], 
+    allowedHeaders: ["Content-Type", "Authorization"],
     }
 ))
 
