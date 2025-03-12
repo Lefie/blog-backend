@@ -23,7 +23,8 @@ const login = async(req, res) => {
             const cookieData = {'isLoggedin':true, 'username':req.body.username}
             res.cookie('chocolate_cookie',{username:req.body.username, isLoggedin:true},{
                 httpOnly:true,
-                sameSite:'strict',
+                secure:true,
+                sameSite:'None',
                 maxAge: 24 * 60 * 60 * 1000,
             })
             
