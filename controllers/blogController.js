@@ -1,3 +1,4 @@
+const cookieSession = require("cookie-session")
 const blogService = require("../services/blogService")
 const formatted_date = require("../utils/processDate")
 
@@ -5,6 +6,7 @@ const formatted_date = require("../utils/processDate")
 const create_blog = async(req, res) => {
     try {
         const cookie = req.cookies['chocolate_cookie']
+        console.log(cookie)
         // the input data
         const {title, content,img_url} = req.body
         const author = cookie.username
@@ -58,6 +60,7 @@ const all_blogs = async(req, res) => {
 const my_blogs = async(req, res) => {
     try {
         const cookie = req.cookies["chocolate_cookie"]
+        console.log("cookie from my blogs", cookie)
         const username = cookie.username
         const my_blogs = await blogService.findBlogsByQuery({author:username})
         res.status(200).json(my_blogs)
