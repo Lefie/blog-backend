@@ -18,6 +18,13 @@ const uploadFromBuffer = (buffer) => {
     })
 }
 
+/*
+const stream = ...
+-> creating a writable stream using cloudinary's upload_stream
+streamifier.createReadStream(buffer) turns the raw buffer into a readable stream.
+Then .pipe(stream) sends that stream into Cloudinary's upload stream — meaning, we pipe the image into Cloudinary.
+*/
+
 router.post("/upload", authenticate, uploadimg.single("image"), async(req, res) =>{
        
     

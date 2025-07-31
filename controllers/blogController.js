@@ -33,9 +33,10 @@ const read_one_blog = async(req,res) => {
     try {
         const blog_id = req.params.blog_id
         const blog = await blogService.findBlogById(blog_id)
-        res.status(200).json(blog)
+        console.log("blog from read one blog",blog)
+        return res.status(200).json(blog)
     }catch(error){
-        res.status(500).json({
+        return res.status(500).json({
             "msg":"error reading a blog",
             "error":error
         })

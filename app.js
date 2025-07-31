@@ -1,5 +1,4 @@
 const express = require("express")
-const connect_db = require("./configs/db")
 const user_routes = require("./routes/userRoutes")
 const blog_routes = require("./routes/blogRoutes")
 const image_routes = require("./routes/imageRoute")
@@ -12,7 +11,7 @@ const cloudinary = require('cloudinary').v2
 
 
 const app = express()
-const port = process.env.PORT
+
 
 //cloudinary config
 cloudinary.config({
@@ -52,19 +51,11 @@ app.use("/img",image_routes)
 //test route
 app.get("/", (req, res) => {
     const sessionData = req.session
-    // req.session.isLoggedin = true
-    // req.session.username = "lemon"
-    // console.log(sessionData.cookie)
-    // console.log(sessionData.username)
-    // console.log(sessionData.isLoggedin)
-    // console.log("cookiessss",req.cookies)
+
     res.send("Hello")
+    res.status(200)
 })
 
 
-app.listen(port || 5050, () => {
-    console.log("app is listening at port", port)
-})
-
-connect_db()
+module.exports = app;
 

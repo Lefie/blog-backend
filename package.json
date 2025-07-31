@@ -2,9 +2,9 @@
   "name": "blog-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "cookie-parser": "^1.4.6",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
+    "cross-env": "^10.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "express-session": "^1.18.1",
@@ -24,5 +25,12 @@
     "openai": "^4.86.1",
     "streamifier": "^0.1.1",
     "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^30.0.5",
+    "superagent": "^10.2.3",
+    "supertest": "^7.1.4"
   }
 }
