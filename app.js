@@ -5,7 +5,6 @@ const image_routes = require("./routes/imageRoute")
 //const session = require('express-session')
 const cors = require('cors')
 require('dotenv').config()
-const body_parser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cloudinary = require('cloudinary').v2
 
@@ -22,10 +21,10 @@ cloudinary.config({
 
 
 app.use(cookieParser())
-app.use(body_parser.json())
-//app.use(express.json())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-const allowedOrigins = ["http://localhost:3000","http://127.0.0.1:3000","https://blog-frontend-1-nine.vercel.app"]
+const allowedOrigins = ["http://localhost:3000","http://127.0.0.1:3000","http://127.0.0.1:5050","https://blog-frontend-1-nine.vercel.app"]
 
 // cors enabled
 app.use(cors({
@@ -50,10 +49,7 @@ app.use("/img",image_routes)
 
 //test route
 app.get("/", (req, res) => {
-    const sessionData = req.session
-
-    res.send("Hello")
-    res.status(200)
+    res.status(200).send("hello")
 })
 
 
