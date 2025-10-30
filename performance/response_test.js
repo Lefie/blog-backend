@@ -33,9 +33,8 @@ async function measureSingleRequest(num){
 
         // get response time / duration 
         const end = performance.now()
-        const response_time = (end - start) / 1000
+        const response_time = (end - start)
 
-        console.log(`Testing endpoint number ${num}, and the response rate is ${response_time} seconds`)
         return {
             responseTime:response_time,
             recordsCount: data_size,
@@ -46,8 +45,7 @@ async function measureSingleRequest(num){
     catch(error) {
         console.log("Error fetching data", error)
         const end = performance.now()
-        const response_time = (end - start) / 1000
-        console.log(`Testing endpoint number ${num}, and the response rate is ${response_time} seconds`)
+        const response_time = (end - start) 
         return {
             responseTime:response_time,
             success: false
@@ -60,7 +58,7 @@ async function runMultipleTests(num_of_tests = 10, endpoint_id) {
     for (let i = 0; i < num_of_tests; i ++) {
         const res = await measureSingleRequest(endpoint_id)
         results.push(res)
-        await new Promise(resolve => setTimeout(resolve, 5));
+        await new Promise(resolve => setTimeout(resolve, 100));
         
     }
     return calculation(results, endpoint_id)
@@ -70,13 +68,21 @@ async function runMultipleTests(num_of_tests = 10, endpoint_id) {
 async function calculation(results, endpoint_id){
 
     const success_results =results.filter(result => result.success === true)
-    const response_time_list = results.map(r => r.responseTime)
+
+    if (success_results.length === 0) {
+        return {
+            endpoint: endpoints[endpoint_id],
+            error: 'all requests failed',
+            successRate: 0
+        }
+    }
+
+    const response_time_list = success_results.map(r => r.responseTime)
     const avg = response_time_list.reduce((acc,cur) => acc+cur,0 ) / response_time_list.length
     const minResponseTime = Math.min(...response_time_list)
     const maxResponseTime = Math.max(...response_time_list)
  
     const success_rate = (success_results.length / results.length) * 100 
-
     const single_success = success_results[0]
     const dataSize = single_success["dataSize"]
     const recordsCount = single_success["recordsCount"]
@@ -94,9 +100,8 @@ async function calculation(results, endpoint_id){
         failedRequests: results.length - success_results.length
     }
 
-    console.log(summary)
     return summary
-
+    
 }
 
 
@@ -145,17 +150,35 @@ async function runPerformanceTests(){
 }
 
 function displaySummary(results){
-    results.forEach((res, index) => {
+    results.forEach((res) => {
         console.log("Tested endpoint: ", res.endpoint)
-        console.log("Success Rate: ", res.successRate)
-        console.log("Average Response: ", res.averageResponse)
-        console.log("Min Response Time: ", res.minResponseTime)
-        console.log("Max Response Time: ", res.maxResponseTime)
-        console.log("Data Size in Bytes: ", res.dataSize)
+        console.log("Success Rate: ", `${res.successRate} %` )
+        console.log("Average Response: ", `${res.averageResponse} ms`)
+        console.log("Min Response Time: ", `${res.minResponseTime} ms`)
+        console.log("Max Response Time: ", `${res.maxResponseTime} ms`)
+        console.log("Data Size in Bytes: ", `${res.dataSize} bytes`)
+        console.log("Data Size in MB: ", `${res.dataSize / (1024 * 1024)} MB`)
         console.log("Record Count: ", res.recordsCount)
         console.log("Total Requests", res.totalRequest)
         console.log("Successful Requests", res.successfulRequests)
         console.log("Failed Requests: ", res.failedRequests)
+        
+        if (res.recordsCount <= 10) {
+            console.log("*****There are less than 10 documents in the record. Add more docs to test if possible*****")
+        }
+
+        else if (res.recordsCount < 50) {
+            console.log("*****You have fewer than 50 documents in the record. Add more docs to test if possible*****")
+        }
+
+        if (res.averageResponse > 1000){
+            console.log("The average response rate is over 1000 ms. SLOW! ")
+        }else if (res.averageResponse > 500) {
+            console.log("The average response rate is of medium speed at around 500 ms. ")
+            console.log("Try to speed it up!")
+        }else {
+            console.log("Good response rate !!")
+        }
         console.log("################################")
        
     })
