@@ -57,6 +57,25 @@ const all_blogs = async(req, res) => {
     }
 }
 
+const all_blogs_pagination = async(req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 10
+
+        
+        const all_blogs_pagination = await blogService.findBlogsByPage(page, limit)
+        return res.status(200).json(all_blogs_pagination)
+
+    }catch(err) {
+        return res.status(500).json({
+            "msg":"error retrieving all blogs by pagination",
+            "error":err
+        })
+    }
+
+}
+
+
 // find all the blogs that belong to the logged in user
 const my_blogs = async(req, res) => {
     try {
@@ -175,6 +194,7 @@ module.exports = {
     create_blog,
     read_one_blog,
     all_blogs,
+    all_blogs_pagination,
     my_blogs,
     update_blog,
     blog_by_author,

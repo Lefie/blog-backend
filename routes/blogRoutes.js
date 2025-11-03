@@ -13,6 +13,9 @@ router.get("/blog/:blog_id", blogController.read_one_blog)
 // find all blogs
 router.get("/all", blogController.all_blogs)
 
+// find all blogs by pagination 
+router.get("/all-paginated", blogController.all_blogs_pagination)
+
 // find all the blogs that belongs to the logged in users 
 router.get("/my_blogs", authenticate, blogController.my_blogs)
 

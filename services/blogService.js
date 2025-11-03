@@ -18,8 +18,34 @@ const findBlogById = async (id) => {
 // find all blogs 
 const findAllBlogs = async () => {
     const blogs = await Blog.find({}).sort({'date':-1})
-                    
     return blogs
+}
+
+// find blogs by their page 
+const findBlogsByPage = async(page = 1, limit = 10) => {
+    const skip = (page - 1) * limit
+    const blog_data = await Blog.find()
+                        .sort({date:-1})
+                        .skip(skip)
+                        .limit(limit)
+        
+    const totalBlogs = await Blog.countDocuments();
+
+    const resp_data = {
+        blog_data, 
+        pagination: {
+            currentPage: page, 
+            blogsPerPage: limit,
+            totalPages: Math.ceil(totalBlogs / limit),
+            totalBlogs:totalBlogs,
+            hasNextPage: page * limit < totalBlogs,
+            hasPrevPage: page > 1,
+            nextPage: page * limit < totalBlogs ? page + 1 : null,
+            prevPage: page > 1 ? page - 1 : null
+        }
+    }
+
+    return resp_data
 }
 
 // find blogs by some condition
@@ -61,5 +87,6 @@ module.exports = {
     updateBlog,
     deleteBlogById,
     findAllAuthors,
-    deleteAllBlogs
+    deleteAllBlogs,
+    findBlogsByPage
 }
