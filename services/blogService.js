@@ -54,6 +54,30 @@ const findBlogsByQuery = async( query ) => {
     return blogs
 }
 
+const findBlogsByQueryPaginated = async (query, page = 1, limit = 10) => {
+    const skip = (page - 1) * limit
+    const blogs = await Blog.find(query).sort({'date':-1}).skip(skip).limit(limit)
+    const totalBlogsByAuthor = await Blog.countDocuments(query)
+    console.log(totalBlogsByAuthor)
+    
+    const resp_data = {
+        blog_data:blogs,
+        pagination: {
+            currentPage: page, 
+            blogsPerPage: limit, 
+            totalPages: Math.ceil(totalBlogsByAuthor / limit),
+            hasNextPage: page * limit < totalBlogsByAuthor,
+            hasPrevPage: page > 1,
+            nextPage: page * limit < totalBlogsByAuthor ? page + 1: null,
+            prevPage: page > 1 ? page - 1: null
+        }
+    }
+    
+    return resp_data
+
+}
+
+
 // find distinct authors 
 const findAllAuthors = async() => {
     const authors = await Blog.distinct('author')
@@ -88,5 +112,6 @@ module.exports = {
     deleteBlogById,
     findAllAuthors,
     deleteAllBlogs,
-    findBlogsByPage
+    findBlogsByPage,
+    findBlogsByQueryPaginated
 }

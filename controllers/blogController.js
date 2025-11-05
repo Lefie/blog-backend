@@ -6,7 +6,7 @@ const formatted_date = require("../utils/processDate")
 const create_blog = async(req, res) => {
     try {
         const cookie = req.cookies['chocolate_cookie']
-        console.log(cookie)
+        //console.log(cookie)
         // the input data
         const {title, content,img_url} = req.body
         const author = cookie.username
@@ -47,7 +47,6 @@ const read_one_blog = async(req,res) => {
 const all_blogs = async(req, res) => {
     try {
        const all_blogs = await blogService.findAllBlogs();
-       console.log("all blogs ", all_blogs)
        return res.status(200).json(all_blogs)
     }catch(error){
         return res.status(500).json({
@@ -96,13 +95,33 @@ const my_blogs = async(req, res) => {
 const blog_by_author = async(req, res) => {
     try{
         const author_name = req.params.author_name
-        console.log("backend", author_name)
+        //console.log("backend", author_name)
         const blogs = await blogService.findBlogsByQuery({author:author_name})
         res.status(200).json(blogs)
     }catch(error){
         res.status(500).json({
             "msg":"error retrieving blogs by author",
             "error":error
+        })
+    }
+}
+
+const blog_by_author_paginated = async(req, res) => {
+    try {
+        const page = req.query.page || 1
+        const limit = req.query.limit || 10
+        const author_name = req.params.author_name
+
+        console.log(page, limit, author_name)
+
+        const data = await blogService.findBlogsByQueryPaginated({author:author_name}, page, limit)
+    
+        res.status(200).json(data)
+
+    }catch(err) {
+        res.status(500).json({
+            "msg":"error retrieving blogs by author by pagination",
+            "error":err
         })
     }
 }
@@ -200,5 +219,6 @@ module.exports = {
     blog_by_author,
     delete_blog,
     authors,
-    delete_all_blogs
+    delete_all_blogs,
+    blog_by_author_paginated
 }

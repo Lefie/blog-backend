@@ -9,4 +9,7 @@ const blogSchema = mongoose.Schema({
     img_url : {type:String}
 })
 
+blogSchema.index({author: 1})
+// blogSchema.index({date:-1})
+
 module.exports =  mongoose.model('Blog',blogSchema)

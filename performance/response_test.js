@@ -4,9 +4,12 @@ const { response } = require("express")
 const baseUrl = `http://localhost:5050/blogs/`
 const endpoints = {
     1: "all",
-    2:"blog/author/lemon",
-    3:"authors",
-    4:"blog/687e8249ec7acd1c4d9fce57"
+    2:"all-paginated?page=5&limit=10",
+    3:"all-paginated?page=100&limit=10",
+    4:"blog/author/lemon",
+    5:"blog-paginated/author/lemon",
+    6:"authors",
+
 }
 
 async function measureSingleRequest(num){
@@ -14,16 +17,22 @@ async function measureSingleRequest(num){
     try {
         const resp = await fetch(baseUrl + endpoints[num])
         const data = await resp.json()
+        
+       
         let dataArray = [];
+        
         if (Array.isArray(data)) {
             dataArray = data
+        }else if(num === 2 || num === 3 || num === 5){
+            dataArray = data.blog_data
         }else{
-            if (num === 3) {
+            if (num === 6) {
                 dataArray = data["authors"]
-            }else if (num === 4) {
-                dataArray.push(data)
             }
         }
+
+
+
         // calculate dataSize in bytes
         const json_string = JSON.stringify(dataArray)
         const sizeInBytes = new TextEncoder().encode(json_string).length;
@@ -52,6 +61,9 @@ async function measureSingleRequest(num){
         }
     }
 }
+
+
+
 
 async function runMultipleTests(num_of_tests = 10, endpoint_id) {
     let results = []
@@ -145,7 +157,25 @@ async function runPerformanceTests(){
         console.error("Test failed", err.message)
     }
 
+    try {
+        const result = await runMultipleTests(10, 5)
+        test_results.push(result)
+
+    }catch(err) {
+        console.error("Test failed", err.message)
+    }
+
+    try {
+        const result = await runMultipleTests(10, 6)
+        test_results.push(result)
+
+    }catch(err) {
+        console.error("Test failed", err.message)
+    }
+
+
     displaySummary(test_results)
+    displayImprovement(test_results)
     
 }
 
@@ -186,8 +216,49 @@ function displaySummary(results){
 
 }
 
-runPerformanceTests()
+function displayImprovement(results) {
+    const endpoint_all = results[0]
+    const endpoint_all_paginated_1 = results[1]
 
+
+    const timeImprovement = ((endpoint_all.averageResponse - endpoint_all_paginated_1.averageResponse) / endpoint_all.averageResponse * 100).toFixed(1)
+    const payloadSizeImprovement = ((endpoint_all.dataSize - endpoint_all_paginated_1.dataSize) / endpoint_all.dataSize * 100).toFixed(1)
+
+    console.log(`Retrieving all blogs (~1000 records) in one sitting on average takes ${endpoint_all.averageResponse} ms. 
+                Retrieving all blogs using pagination (10/page) on average takes ${endpoint_all_paginated_1.averageResponse} ms. 
+                the Average response rate of blog retrieval increased by ${timeImprovement} %`)
+   
+    console.log(` `)
+
+    
+    console.log(`The payload size of all blogs (~1000 records) is ${endpoint_all.dataSize} bytes. 
+                The payload size of all blogs using pagination (10/page) is ${endpoint_all_paginated_1.dataSize} bytes. 
+                the Average response rate of blog payload size decreased by ${payloadSizeImprovement} %`)
+
+    console.log(` `)
+    const endpoint_author = results[4]
+    const endpoints_author_paginated = results[5]
+
+    const timeImprovement_author = ((endpoint_author.averageResponse - endpoints_author_paginated.averageResponse) / endpoint_author.averageResponse * 100).toFixed(1)
+    const payloadSizeImprovement_author = ((endpoint_author.dataSize - endpoints_author_paginated.dataSize) / endpoint_author.dataSize * 100).toFixed(1)
+
+
+    console.log(`Retrieving all blogs by this author (~100 records) in one sitting on average takes ${endpoint_author.averageResponse} ms. 
+                Retrieving all blogs by this author using pagination (10/page) on average takes ${endpoints_author_paginated.averageResponse} ms. 
+                the Average response rate of blog retrieval increased by ${timeImprovement_author} %`)
+   
+    console.log(` `)
+
+    
+    console.log(`The payload size of all blogs by this author (~100 records) is ${endpoint_author.dataSize} bytes. 
+                The payload size of all blogs by this author using pagination(10/page) is ${endpoints_author_paginated.dataSize} bytes. 
+                the Average response rate of blog payload size decreased by ${payloadSizeImprovement_author} %`)
+
+
+
+}
+
+runPerformanceTests()
 
 
 

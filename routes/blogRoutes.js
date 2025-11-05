@@ -22,6 +22,8 @@ router.get("/my_blogs", authenticate, blogController.my_blogs)
 // find blogs that belong to a certain user
 router.get("/blog/author/:author_name",blogController.blog_by_author)
 
+router.get("/blog-paginated/author/:author_name", blogController.blog_by_author_paginated)
+
 // find all the distinct authors 
 router.get("/authors", blogController.authors)
 
