@@ -82,6 +82,9 @@ const my_blogs = async(req, res) => {
         console.log("cookie from my blogs", cookie)
         const username = cookie.username
         const my_blogs = await blogService.findBlogsByQuery({author:username})
+        const data = await blogService.findBlogsByQueryPaginated({author:username}, 10, 10)
+        console.log(data)
+
         res.status(200).json(my_blogs)
     }catch(error){
         res.status(500).json({
@@ -90,6 +93,27 @@ const my_blogs = async(req, res) => {
         })
     }
 }
+
+// find all the blogs that belong to the logged in user
+const my_blogs_paginated = async(req, res) => {
+    try {
+        const cookie = req.cookies["chocolate_cookie"]
+        console.log("cookie from my blogs", cookie)
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 10
+
+        const username = cookie.username
+        const data = await blogService.findBlogsByQueryPaginated({author:username}, page, limit)
+        console.log(data)
+        res.status(200).json(data)
+    }catch(error){
+        res.status(500).json({
+            "msg":"error retrieving blogs by logged in user",
+            "error":error
+        })
+    }
+}
+
 
 // find blogs that belong to a certain author
 const blog_by_author = async(req, res) => {
@@ -220,5 +244,6 @@ module.exports = {
     delete_blog,
     authors,
     delete_all_blogs,
-    blog_by_author_paginated
+    blog_by_author_paginated,
+    my_blogs_paginated
 }
